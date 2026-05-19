@@ -47,3 +47,6 @@ Bu döküman, projemizdeki 14 temel tablonun yapısını, kolonlarını ve arala
 
 ### Iadeler (Returns)
 - `IadeID` (PK), `SiparisID` (FK), `UrunID` (FK), `IadeSebebi`, `IadeDurumu`, `TalepTarihi`
+- ## 📊 Market Sipariş ve Teslimat Sistemi - E-R Diyagramı
+
+![Market Veri Tabanı Şeması](E-R%20Diyagramam.drawio.png)
