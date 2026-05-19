@@ -1,35 +1,49 @@
-# Market-Siparis-VTYS-Projesi
-Market şiparis ve teslimat sistemi veri tabanı yönetim sistemi projesi 
-# Market Sipariş ve Teslimat Sistemi - Veri Sözlüğü
+# 🛒 Market Sipariş ve Teslimat Sistemi - Veri Tabanı Tasarımı
 
-Bu döküman, projemizdeki 10 temel tablonun yapısını ve içereceği verileri tanımlar.
+Bu döküman, projemizdeki 14 temel tablonun yapısını, kolonlarını ve aralarındaki ilişkileri tanımlar. 
 
-### 1. Kullanıcılar (Users)
-- `KullaniciID` (PK), `Ad`, `Soyad`, `Email`, `SifreHash`, `Telefon`, `Rol` (Müşteri/Admin)
+## 🏗️ 1. Kullanıcı ve Lokasyon Yönetimi
+### Kullanicilar (Users)
+- `KullaniciID` (PK), `Ad`, `Soyad`, `Email` (Unique), `SifreHash`, `Telefon`, `Rol` (Müşteri/Kurye/Admin), `KayitTarihi`
 
-### 2. Adresler (Addresses)
-- `AdresID` (PK), `KullaniciID` (FK), `Baslik`, `Sehir`, `Ilce`, `AcikAdres`
+### Adresler (Addresses)
+- `AdresID` (PK), `KullaniciID` (FK), `Baslik`, `Sehir`, `Ilce`, `AcikAdres`, `VarsayilanMi` (Bit)
 
-### 3. Kategoriler (Categories)
+## 📦 2. Ürün ve Stok Katmanı
+### Kategoriler (Categories)
 - `KategoriID` (PK), `KategoriAdi`, `Aciklama`
 
-### 4. Ürünler (Products)
-- `UrunID` (PK), `KategoriID` (FK), `UrunAdi`, `Fiyat`, `StokMiktari`, `Barkod`
+### Urunler (Products)
+- `UrunID` (PK), `KategoriID` (FK), `UrunAdi`, `Marka`, `BirimFiyat`, `StokMiktari`, `Barkod`
 
-### 5. Stok Hareketleri (Stock_Movements)
-- `HareketID` (PK), `UrunID` (FK), `Miktar`, `Tip` (Giriş/Çıkış), `Tarih`
+### Urun_Fotograflari (Product_Images)
+- `FotoID` (PK), `UrunID` (FK), `FotoURL`
 
-### 6. Siparişler (Orders)
-- `SiparisID` (PK), `KullaniciID` (FK), `AdresID` (FK), `Tarih`, `ToplamTutar`, `Durum`
+### Urun_Yorumlari (Product_Reviews)
+- `YorumID` (PK), `UrunID` (FK), `KullaniciID` (FK), `Puan` (1-5), `YorumMetni`, `Tarih`
 
-### 7. Sipariş Detayları (Order_Items)
-- `DetayID` (PK), `SiparisID` (FK), `UrunID` (FK), `Adet`, `BirimFiyat`
+### Stok_Hareketleri (Stock_Movements)
+- `HareketID` (PK), `UrunID` (FK), `Miktar`, `IslemTipi` (Giriş/Çıkış), `Tarih`
 
-### 8. Kuryeler (Couriers)
-- `KuryeID` (PK), `Ad`, `Soyad`, `Plaka`, `Telefon`, `Aktiflik`
+## 💳 3. Satış ve Sipariş Operasyonu
+### Siparisler (Orders)
+- `SiparisID` (PK), `KullaniciID` (FK), `AdresID` (FK), `KuponID` (FK - Opsiyonel), `SiparisTarihi`, `ToplamTutar`, `MevcutDurum`
 
-### 9. Ödemeler (Payments)
-- `OdemeID` (PK), `SiparisID` (FK), `Tip` (Kart/Nakit), `Durum`, `IslemTarihi`
+### Siparis_Detaylari (Order_Items)
+- `DetayID` (PK), `SiparisID` (FK), `UrunID` (FK), `Adet`, `SatisFiyati` (Sipariş anındaki fiyat)
 
-### 10. İndirim Kuponları (Coupons)
-- `KuponID` (PK), `Kod`, `IndirimOrani`, `SonKullanimTarihi`
+### Siparis_Durum_Gecmisi (Order_Status_History)
+- `GecmisID` (PK), `SiparisID` (FK), `Durum` (Hazırlanıyor/Yolda/Teslim Edildi), `GuncellemeTarihi`
+
+### Odemeler (Payments)
+- `OdemeID` (PK), `SiparisID` (FK), `OdemeTipi` (Nakit/Kart), `OdemeDurumu` (Başarılı/Beklemede), `Tarih`
+
+## 🚚 4. Lojistik ve Kampanya
+### Kuryeler (Couriers)
+- `KuryeID` (PK), `KullaniciID` (FK), `AracTipi`, `Plaka`, `AktifMi` (Bit)
+
+### Kuponlar (Coupons)
+- `KuponID` (PK), `KuponKodu`, `IndirimOrani`, `SonKullanimTarihi`, `MinimumAltLimit`
+
+### Iadeler (Returns)
+- `IadeID` (PK), `SiparisID` (FK), `UrunID` (FK), `IadeSebebi`, `IadeDurumu`, `TalepTarihi`
